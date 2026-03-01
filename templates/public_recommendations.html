@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Trade Performance{% endblock %}
+
+{% block content %}
+<main class="flex-1 bg-gray-50 py-10 px-6">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-8">📊 Trade Performance Summary</h2>
+
+        <!-- Completed Trades Chart -->
+        {% if completed_data %}
+        <div class="bg-white rounded-2xl shadow p-6 mb-10">
+            <h4 class="text-xl font-semibold mb-4 text-center">✅ Completed Trades (Total Returns %)</h4>
+            <canvas id="completedChart" height="100"></canvas>
+        </div>
+        {% endif %}
+
+        <!-- Ongoing Trades Chart -->
+        {% if ongoing_data %}
+        <div class="bg-white rounded-2xl shadow p-6 mb-10">
+            <h4 class="text-xl font-semibold mb-4 text-center">⏳ Ongoing Trades (Current Returns %)</h4>
+            <canvas id="ongoingChart" height="100"></canvas>
+        </div>
+        {% endif %}
+
+        <!-- Trade Details Table -->
+        <div class="bg-white rounded-2xl shadow p-6 overflow-x-auto">
+            <h4 class="text-xl font-semibold mb-4 text-center">💹 Trade Details</h4>
+            <table class="min-w-full text-sm text-left">
+                <thead class="bg-gray-800 text-white">
+                    <tr>
+                        <th class="p-3">Script</th>
+                        <th class="p-3">Buy Price (₹)</th>
+                        <th class="p-3">Exit / LTP (₹)</th>
+                        <th class="p-3">Status</th>
+                        <th class="p-3">Return (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in recos %}
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="p-3">{{ r.script }}</td>
+                        <td class="p-3">{{ r.purchase_price }}</td>
+                        <td class="p-3">{{ r.exit_price }}</td>
+                        <td class="p-3 font-semibold text-{{ 'green-600' if r.status == 'Completed' else 'blue-600' }}">
+                            {{ r.status }}</td>
+                        <td class="p-3">{{ r.pnl_pct }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const completed = {{ completed_data | tojson }};
+    const ongoing = {{ ongoing_data | tojson }};
+
+    if (completed.length > 0) {
+        new Chart(document.getElementById('completedChart'), {
+            type: 'bar',
+            data: {
+                labels: completed.map(d => d.symbol),
+                datasets: [{
+                    label: 'Return (%)',
+                    data: completed.map(d => d.return),
+                    backgroundColor: completed.map(d => d.return >= 0 ? '#16a34a' : '#dc2626')
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { title: { display: true, text: 'Stock' } },
+                    y: { title: { display: true, text: 'Return (%)' } }
+                }
+            }
+        });
+    }
+
+    if (ongoing.length > 0) {
+        new Chart(document.getElementById('ongoingChart'), {
+            type: 'bar',
+            data: {
+                labels: ongoing.map(d => d.symbol),
+                datasets: [{
+                    label: 'Return (%)',
+                    data: ongoing.map(d => d.return),
+                    backgroundColor: ongoing.map(d => d.return >= 0 ? '#0ea5e9' : '#dc2626')
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { title: { display: true, text: 'Stock' } },
+                    y: { title: { display: true, text: 'Return (%)' } }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

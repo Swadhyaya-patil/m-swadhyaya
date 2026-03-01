@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Risk Profiling{% endblock %}
+{% block content %}
+<div class="container max-w-3xl mx-auto py-10 px-6">
+    <h2 class="text-2xl font-bold mb-4">Investor Profiling Questionnaire</h2>
+    <p class="text-gray-600 mb-6">Answer a few questions so we can tailor trade execution to your style.</p>
+    <form method="POST" action="{{ url_for('risk_profile') }}">
+
+        <!-- Q1 -->
+        <div class="mb-3">
+            <label><strong>1. How long do you plan to stay invested?</strong></label><br>
+            <input type="radio" name="horizon" value="1" required> Less than 1 year <br>
+            <input type="radio" name="horizon" value="2"> 1–3 years <br>
+            <input type="radio" name="horizon" value="3"> 3–5 years <br>
+            <input type="radio" name="horizon" value="4"> 5+ years <br>
+        </div>
+
+        <!-- Q2 -->
+        <div class="mb-3">
+            <label><strong>2. What is your main financial objective?</strong></label><br>
+            <input type="radio" name="goal" value="1" required> Capital preservation (safety) <br>
+            <input type="radio" name="goal" value="2"> Steady income <br>
+            <input type="radio" name="goal" value="3"> Balanced growth + income <br>
+            <input type="radio" name="goal" value="4"> Long-term growth / wealth creation <br>
+        </div>
+
+        <!-- Q3 -->
+        <div class="mb-3">
+            <label><strong>3. If your portfolio dropped 15% in 3 months, how would you react?</strong></label><br>
+            <input type="radio" name="volatility" value="1" required> Panic & sell everything <br>
+            <input type="radio" name="volatility" value="2"> Reduce exposure to risk <br>
+            <input type="radio" name="volatility" value="3"> Hold & wait it out <br>
+            <input type="radio" name="volatility" value="4"> Buy more at lower prices <br>
+        </div>
+
+        <!-- Q4 -->
+        <div class="mb-3">
+            <label><strong>4. Which investment option appeals to you most?</strong></label><br>
+            <input type="radio" name="risk" value="1" required> Fixed deposit (6% guaranteed) <br>
+            <input type="radio" name="risk" value="2"> Balanced fund (8–10% return, moderate risk) <br>
+            <input type="radio" name="risk" value="3"> Equity MF (15% potential return, high risk) <br>
+            <input type="radio" name="risk" value="4"> Stocks/derivatives (20%+ potential, very high risk) <br>
+        </div>
+
+        <!-- Q5 -->
+        <div class="mb-3">
+            <label><strong>5. What portion of your investments are you comfortable risking?</strong></label><br>
+            <input type="radio" name="allocation" value="1" required> 0–10% <br>
+            <input type="radio" name="allocation" value="2"> 10–30% <br>
+            <input type="radio" name="allocation" value="3"> 30–50% <br>
+            <input type="radio" name="allocation" value="4"> 50%+ <br>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}

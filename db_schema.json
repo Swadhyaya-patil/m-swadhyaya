@@ -1,0 +1,384 @@
+{
+  "trade_recommendations": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INTEGER",
+        "nullable": false,
+        "default": null
+      },
+      {
+        "name": "script_name",
+        "type": "VARCHAR(50)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "reco_dt",
+        "type": "DATE",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "purchase_dt",
+        "type": "DATE",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "purchase_price",
+        "type": "DECIMAL(12, 2)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "reasoning",
+        "type": "TEXT",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "tls",
+        "type": "DECIMAL(12, 2)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "exit_dt",
+        "type": "DATE",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "exit_price",
+        "type": "DECIMAL(12, 2)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "qty",
+        "type": "INTEGER",
+        "nullable": true,
+        "default": "'0'"
+      }
+    ],
+    "primary_key": [
+      "id"
+    ],
+    "foreign_keys": [],
+    "indexes": []
+  },
+  "trades": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INTEGER",
+        "nullable": false,
+        "default": null
+      },
+      {
+        "name": "user_id",
+        "type": "INTEGER",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "trade_recommendation_id",
+        "type": "INTEGER",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "purchase_dt",
+        "type": "DATE",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "purchase_price",
+        "type": "FLOAT",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "exit_dt",
+        "type": "DATE",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "exit_price",
+        "type": "FLOAT",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "qty",
+        "type": "INTEGER",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "tls",
+        "type": "FLOAT",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "status",
+        "type": "VARCHAR(50)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "script_name",
+        "type": "VARCHAR(100)",
+        "nullable": true,
+        "default": null
+      }
+    ],
+    "primary_key": [
+      "id"
+    ],
+    "foreign_keys": [
+      {
+        "constrained_columns": [
+          "user_id"
+        ],
+        "referred_table": "users",
+        "referred_columns": [
+          "id"
+        ]
+      },
+      {
+        "constrained_columns": [
+          "trade_recommendation_id"
+        ],
+        "referred_table": "trade_recommendations",
+        "referred_columns": [
+          "id"
+        ]
+      }
+    ],
+    "indexes": [
+      {
+        "name": "trade_recommendation_id",
+        "column_names": [
+          "trade_recommendation_id"
+        ],
+        "unique": false
+      },
+      {
+        "name": "user_id",
+        "column_names": [
+          "user_id"
+        ],
+        "unique": false
+      }
+    ]
+  },
+  "user_trades": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INTEGER",
+        "nullable": false,
+        "default": null
+      },
+      {
+        "name": "user_id",
+        "type": "INTEGER",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "trade_recommendation_id",
+        "type": "INTEGER",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "executed_qty",
+        "type": "INTEGER",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "executed_price",
+        "type": "DECIMAL(12, 2)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "tls",
+        "type": "DECIMAL(12, 2)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "exit_dt",
+        "type": "DATE",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "exit_price",
+        "type": "DECIMAL(12, 2)",
+        "nullable": true,
+        "default": null
+      }
+    ],
+    "primary_key": [
+      "id"
+    ],
+    "foreign_keys": [
+      {
+        "constrained_columns": [
+          "user_id"
+        ],
+        "referred_table": "users",
+        "referred_columns": [
+          "id"
+        ]
+      },
+      {
+        "constrained_columns": [
+          "trade_recommendation_id"
+        ],
+        "referred_table": "trade_recommendations",
+        "referred_columns": [
+          "id"
+        ]
+      }
+    ],
+    "indexes": [
+      {
+        "name": "trade_recommendation_id",
+        "column_names": [
+          "trade_recommendation_id"
+        ],
+        "unique": false
+      },
+      {
+        "name": "user_id",
+        "column_names": [
+          "user_id"
+        ],
+        "unique": false
+      }
+    ]
+  },
+  "users": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INTEGER",
+        "nullable": false,
+        "default": null
+      },
+      {
+        "name": "username",
+        "type": "VARCHAR(50)",
+        "nullable": false,
+        "default": null
+      },
+      {
+        "name": "password_hash",
+        "type": "VARCHAR(255)",
+        "nullable": false,
+        "default": null
+      },
+      {
+        "name": "role",
+        "type": "ENUM",
+        "nullable": true,
+        "default": "'user'"
+      },
+      {
+        "name": "name",
+        "type": "VARCHAR(100)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "pan",
+        "type": "VARCHAR(20)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "mobile",
+        "type": "VARCHAR(15)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "broker",
+        "type": "VARCHAR(50)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "api_key",
+        "type": "VARCHAR(100)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "client_id",
+        "type": "VARCHAR(50)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "mpin",
+        "type": "VARCHAR(20)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "totp_token",
+        "type": "VARCHAR(50)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "capital",
+        "type": "DECIMAL(12, 2)",
+        "nullable": true,
+        "default": null
+      },
+      {
+        "name": "is_active",
+        "type": "TINYINT",
+        "nullable": true,
+        "default": "'1'"
+      },
+      {
+        "name": "registered_on",
+        "type": "DATETIME",
+        "nullable": true,
+        "default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "name": "created_at",
+        "type": "TIMESTAMP",
+        "nullable": true,
+        "default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "primary_key": [
+      "id"
+    ],
+    "foreign_keys": [],
+    "indexes": [
+      {
+        "name": "username",
+        "column_names": [
+          "username"
+        ],
+        "unique": true
+      }
+    ]
+  }
+}

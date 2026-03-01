@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Join Program{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto py-12 px-6">
+    <h2 class="text-3xl font-bold mb-6">Membership Plans</h2>
+    <p class="mb-6 text-gray-700">
+        Start with a <strong>free 3-month trial</strong>. After that, choose the plan that suits you.
+    </p>
+
+    <div class="grid md:grid-cols-2 gap-6">
+        <div class="border rounded-xl p-6 bg-white shadow">
+            <h3 class="text-xl font-bold mb-2">🎁 Free Trial</h3>
+            <ul class="text-gray-600 list-disc pl-5 space-y-2">
+                <li>3 months free</li>
+                <li>All trade recommendations</li>
+                <li>Auto execution & TSL</li>
+                <li>Portfolio analysis</li>
+            </ul>
+            <a href="{{ url_for('register') }}"
+                class="mt-4 inline-block bg-[#629155] text-white px-6 py-2 rounded-full font-bold">Join Now</a>
+        </div>
+        <div class="border rounded-xl p-6 bg-white shadow">
+            <h3 class="text-xl font-bold mb-2">💼 Paid Plan</h3>
+            <ul class="text-gray-600 list-disc pl-5 space-y-2">
+                <li>Everything in Free Trial</li>
+                <li>Priority support</li>
+                <li>Advanced portfolio insights</li>
+                <li>Coming soon...</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

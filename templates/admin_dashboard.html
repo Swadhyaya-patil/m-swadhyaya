@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto mt-10 px-4">
+    <h2 class="text-2xl font-bold mb-6 text-[#121810]">Admin Dashboard</h2>
+
+    <div class="flex flex-wrap gap-3 mb-8">
+        <a href="{{ url_for('add_trade') }}"
+            class="inline-flex items-center justify-center rounded-full h-10 px-4 bg-[#8cd279] text-sm font-bold text-[#121810] hover:bg-[#7ac66a] transition">
+            Add Trade Recommendation
+        </a>
+        <a href="{{ url_for('execute_trade') }}"
+            class="inline-flex items-center justify-center rounded-full h-10 px-4 bg-[#8cd279] text-sm font-bold text-[#121810] hover:bg-[#7ac66a] transition">
+            Execute Trade for All Users
+        </a>
+        <a href="{{ url_for('set_TSL') }}"
+            class="inline-flex items-center justify-center rounded-full h-10 px-4 bg-[#8cd279] text-sm font-bold text-[#121810] hover:bg-[#7ac66a] transition">
+            set_TSL for All Users
+        </a>
+        <a href="{{ url_for('admin_logout') }}"
+            class="inline-flex items-center justify-center rounded-full h-10 px-4 bg-red-200 text-sm font-bold text-red-800 hover:bg-red-300 transition">
+            Logout
+        </a>
+    </div>
+
+    <h3 class="text-xl font-semibold mb-4 text-[#121810]">All Trades</h3>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-200 rounded-lg">
+            <thead class="bg-[#ebf1ea]">
+                <tr>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-[#121810]">ID</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-[#121810]">User ID</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-[#121810]">Trade Rec. ID</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-[#121810]">Script Name</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-[#121810]">Purchase Date</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-[#121810]">Status</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for trade in trades %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-2 text-sm text-[#121810]">{{ trade.id }}</td>
+                    <td class="px-4 py-2 text-sm text-[#121810]">{{ trade.user_id }}</td>
+                    <td class="px-4 py-2 text-sm text-[#121810]">{{ trade.trade_recommendation_id }}</td>
+                    <td class="px-4 py-2 text-sm text-[#121810]">{{ trade.script_name }}</td>
+                    <td class="px-4 py-2 text-sm text-[#121810]">{{ trade.purchase_dt }}</td>
+                    <td class="px-4 py-2 text-sm text-[#121810]">{{ trade.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

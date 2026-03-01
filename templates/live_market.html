@@ -1,0 +1,709 @@
+{% extends 'base.html' %}
+{% block title %}Live Market{% endblock %}
+{% block content %}
+
+<!-- Styles (kept local since base.html blocks unknown) -->
+<style>
+    :root {
+        --bg: #101423;
+        --card: #171c2c;
+        --muted: #e6e9f2;
+        --text: #e6e9f2;
+        --green: #00e676;
+        --red: #ff5252;
+        --yellow: #ffd166;
+        --grid: #e6e9f2;
+        --accent: #5a6bff;
+    }
+
+    * {
+        box-sizing: border-box
+    }
+
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    header {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+    }
+
+    h1 {
+        font-size: 20px;
+        margin: 0;
+        letter-spacing: .3px
+    }
+
+    .badge {
+        font-size: 12px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #0f1320;
+        border: 1px solid var(--grid);
+        color: var(--muted);
+    }
+
+    .top-row {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: 1.2fr 1fr;
+        margin-bottom: 16px;
+    }
+
+    .card {
+        background: var(--card);
+        border: 1px solid var(--grid);
+        border-radius: 14px;
+        padding: 14px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, .25);
+    }
+
+    .card h2 {
+        font-size: 14px;
+        font-weight: 600;
+        margin: 0 0 10px 0;
+        color: #cdd3ea;
+        letter-spacing: .2px
+    }
+
+    .grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    }
+
+    .stock-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #cdd3ea;
+        gap: 12px;
+        margin-bottom: 6px;
+    }
+
+    .sym {
+        font-weight: 700;
+        font-size: 15px
+    }
+
+    .ltp {
+        font-weight: 700;
+        font-size: 16px
+    }
+
+    .pos {
+        color: var(--green)
+    }
+
+    .neg {
+        color: var(--red)
+    }
+
+    .muted {
+        color: var(--muted)
+    }
+
+    .kpis {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        color: #cdd3ea;
+        gap: 8px;
+        margin: 10px 0 6px
+    }
+
+    .kpi {
+        background: #121728;
+        border: 1px solid var(--grid);
+        border-radius: 10px;
+        padding: 8px
+    }
+
+    .kpi .label {
+        font-size: 11px;
+        color: var(--muted)
+    }
+
+    .kpi .value {
+        font-size: 14px;
+        font-weight: 700;
+        margin-top: 4px
+    }
+
+    .rows2 {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: 12px;
+        margin-top: 8px;
+    }
+
+    .mini {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    .mini canvas {
+        height: 70px !important;
+    }
+
+    .depth canvas {
+        height: 140px !important;
+    }
+
+    .gauge canvas {
+        height: 120px !important;
+    }
+
+    .bands {
+        display: grid;
+        gap: 10px;
+        margin-top: 6px
+    }
+
+    .band {
+        height: 18px;
+        position: relative;
+        background: #0f1426;
+        border: 1px solid var(--grid);
+        border-radius: 999px;
+        overflow: hidden
+    }
+
+    .band .fill {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, #3a4166, #2a3146)
+    }
+
+    .band .marker {
+        position: absolute;
+        top: -4px;
+        width: 2px;
+        height: 26px;
+        background: var(--yellow);
+        box-shadow: 0 0 6px rgba(255, 209, 102, .8)
+    }
+
+    .band .labels {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 8px;
+        font-size: 10px;
+        color: #aab0c8
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 6px 0 8px
+    }
+
+    .pill {
+        font-size: 11px;
+        color: #aab0c8
+    }
+
+    .closed {
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px dashed var(--grid);
+        background: #121728;
+        color: #aab0c8;
+        text-align: center
+    }
+
+    .legend-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 6px
+    }
+</style>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="px-6 py-6">
+    <h1 class="text-3xl font-bold mb-4">📈 Live Market Dashboard</h1>
+    <p class="text-gray-400 mb-6">Real-time monitoring of stock performance. Our engine auto-executes trades while you
+        observe.</p>
+</div>
+
+<!-- Top: Market Breadth -->
+<div class="top-row">
+    <div class="card">
+        <h2>Market Breadth</h2>
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:6px">
+            <span class="legend-dot" style="background:var(--green)"></span><span class="pill">Up</span>
+            <span class="legend-dot" style="background:var(--red)"></span><span class="pill">Down</span>
+        </div>
+        <canvas id="breadthChart" height="120"></canvas>
+    </div>
+    <div class="card">
+        <h2>Session</h2>
+        <div id="sessionBox" class="closed">Waiting for data…</div>
+        <div class="pill" style="margin-top:8px">Last Updated: <span id="lastUpdated">—</span></div>
+    </div>
+</div>
+
+<!-- Stock Cards -->
+<div id="stocksGrid" class="grid"></div>
+
+<script>
+    // ======= Utilities =======
+    const depthCharts = {}, gaugeCharts = {}, sparkCharts = {}, volCharts = {};
+    const sparkHistory = {}, volHistory = {};
+    const MAX_POINTS = 50;
+
+    const idSafe = s => String(s || '').replace(/[^a-zA-Z0-9_-]/g, '_');
+    const pick = (obj, ...keys) => {
+        for (const k of keys) if (obj && obj[k] !== undefined && obj[k] !== null) return obj[k];
+        return undefined;
+    };
+    const fmtInt = n => isFinite(n) ? Number(n).toLocaleString('en-IN') : '—';
+    const fmtMoney = n => isFinite(n) ? '₹' + Number(n).toLocaleString('en-IN', { maximumFractionDigits: 2 }) : '—';
+
+    // ======= Center text plugin for gauge =======
+    // ✅ Register the plugin only once
+    // ✅ Ensure Chart plugin is only registered once
+    if (!Chart.registry.plugins.get('centerText')) {
+        Chart.register({
+            id: 'centerText',
+            afterDraw(chart) {
+                const { ctx, chartArea: { width, height } } = chart;
+                const pluginOpts = chart.config.options.plugins.centerText;
+                if (!pluginOpts?.text) return;
+
+                ctx.save();
+                ctx.font = 'bold 16px sans-serif';
+                ctx.fillStyle = pluginOpts.color || '#fff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(pluginOpts.text, width / 2, height / 2);
+                ctx.restore();
+            }
+        });
+    }
+
+    // ✅ Global cache of gauges
+    window.gaugeCharts = window.gaugeCharts || {};
+
+    function renderGauge(symbol, buy, sell) {
+        const sid = idSafe(symbol);
+        const el = document.getElementById(`gauge_${sid}`);
+        if (!el) return;
+
+        const total = Math.max(1, (buy || 0) + (sell || 0));
+        const buyPct = Math.round(((buy || 0) * 100) / total);
+        const sellPct = 100 - buyPct;
+
+        // ✅ Create chart only once
+        if (!window.gaugeCharts[symbol]) {
+            const ctx = el.getContext('2d');
+            window.gaugeCharts[symbol] = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Buy', 'Sell'],
+                    datasets: [{
+                        data: [buyPct, sellPct],
+                        backgroundColor: ['#00e676', '#ff5252'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    cutout: '70%',
+                    plugins: {
+                        legend: { display: false },
+                        centerText: {
+                            text: `${buyPct}%`,
+                            color: buyPct >= 50 ? '#00e676' : '#ff5252'
+                        }
+                    },
+                    animation: false
+                }
+            });
+        } else {
+            // ✅ Update only values (no reset / flicker)
+            const chart = window.gaugeCharts[symbol];
+            chart.data.datasets[0].data[0] = buyPct;
+            chart.data.datasets[0].data[1] = sellPct;
+            chart.options.plugins.centerText.text = `${buyPct}%`;
+            chart.options.plugins.centerText.color = buyPct >= 50 ? '#00e676' : '#ff5252';
+            chart.update('none'); // ← no animation flicker
+        }
+    }
+
+
+
+    function renderDepth(symbol, buyLevels, sellLevels) {
+        const el = document.getElementById(`depth_${idSafe(symbol)}`);
+        if (!el) return;
+
+        const labels = Array.from({ length: 5 }, (_, i) => `L${i + 1}`);
+        const buy = (buyLevels || []).slice(0, 5).map(x => Number(pick(x, 'quantity', 'qty')) || 0);
+        const sell = (sellLevels || []).slice(0, 5).map(x => Number(pick(x, 'quantity', 'qty')) || 0);
+
+        const cfg = {
+            type: 'bar',
+            data: {
+                labels, datasets: [
+                    { label: 'Buy', data: buy, backgroundColor: '#00e676' },
+                    { label: 'Sell', data: sell, backgroundColor: '#ff5252' }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom', labels: { color: '#cdd3ea' } } },
+                scales: {
+                    x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#aab0c8' } },
+                    y: { grid: { color: 'rgba(255,255,255,0.08)' }, ticks: { color: '#aab0c8' }, beginAtZero: true }
+                }
+            }
+        };
+
+        if (depthCharts[symbol]) {
+            depthCharts[symbol].data.datasets[0].data = buy;
+            depthCharts[symbol].data.datasets[1].data = sell;
+            depthCharts[symbol].update();
+        } else {
+            depthCharts[symbol] = new Chart(el.getContext('2d'), cfg);
+        }
+    }
+
+    function renderSpark(symbol, ltp) {
+        if (!sparkHistory[symbol]) sparkHistory[symbol] = [];
+        sparkHistory[symbol].push(Number(ltp) || 0);
+        if (sparkHistory[symbol].length > MAX_POINTS) sparkHistory[symbol].shift();
+
+        const el = document.getElementById(`spark_${idSafe(symbol)}`);
+        if (!el) return;
+
+        const rise = sparkHistory[symbol].at(-1) - sparkHistory[symbol][0] >= 0;
+        const color = rise ? '#00e676' : '#ff5252';
+
+        const cfg = {
+            type: 'line',
+            data: {
+                labels: sparkHistory[symbol].map((_, i) => i),
+                datasets: [{ data: sparkHistory[symbol], borderColor: color, borderWidth: 2, pointRadius: 0, fill: false, tension: 0.25 }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
+        };
+
+        if (sparkCharts[symbol]) {
+            sparkCharts[symbol].data.labels = cfg.data.labels;
+            sparkCharts[symbol].data.datasets[0].data = cfg.data.datasets[0].data;
+            sparkCharts[symbol].data.datasets[0].borderColor = color;
+            sparkCharts[symbol].update();
+        } else {
+            sparkCharts[symbol] = new Chart(el.getContext('2d'), cfg);
+        }
+    }
+
+    // FIX: point to the correct canvas id for volume bars
+    function renderVol(symbol, vol) {
+        if (!volHistory[symbol]) volHistory[symbol] = [];
+        volHistory[symbol].push(Number(vol) || 0);
+        if (volHistory[symbol].length > MAX_POINTS) volHistory[symbol].shift();
+
+        const el = document.getElementById(`volc_${idSafe(symbol)}`);
+        if (!el) return;
+
+        const cfg = {
+            type: 'line',
+            data: {
+                labels: volHistory[symbol].map((_, i) => i),
+                datasets: [{
+                    data: volHistory[symbol],
+                    borderColor: '#5a6bff',
+                    backgroundColor: 'rgba(90,107,255,0.1)',
+                    tension: 0.3,
+                    fill: true,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { display: false },
+                    y: { display: false }
+                },
+                elements: { line: { borderWidth: 1 } }
+            }
+        };
+
+        if (volCharts[symbol]) {
+            volCharts[symbol].data.labels = cfg.data.labels;
+            volCharts[symbol].data.datasets[0].data = cfg.data.datasets[0].data;
+            volCharts[symbol].update();
+        } else {
+            volCharts[symbol] = new Chart(el.getContext('2d'), cfg);
+        }
+    }
+
+
+
+    function drawBand(container, min, max, val) {
+        if (!container) return;
+        const span = container.querySelector('.fill');
+        const marker = container.querySelector('.marker');
+        const labels = container.querySelector('.labels');
+        if ([min, max, val].some(v => v === undefined || v === null)) return;
+
+        const lo = Number(min) || 0, hi = Number(max) || 0, v = Number(val) || 0;
+        const range = (hi - lo) || 1;
+        const pct = Math.max(0, Math.min(100, ((v - lo) * 100 / range)));
+        span.style.width = '100%';
+        marker.style.left = `calc(${pct}% - 1px)`;
+        labels.innerHTML = `<span>${fmtMoney(lo)}</span><span>${fmtMoney(hi)}</span>`;
+    }
+
+    function renderBands(symbol, ltp, low, high, cl, ch) {
+        drawBand(document.getElementById(`band52_${idSafe(symbol)}`), low, high, ltp);
+        drawBand(document.getElementById(`bandC_${idSafe(symbol)}`), cl, ch, ltp);
+    }
+
+    function renderBreadth(stocks) {
+        const up = stocks.filter(s => {
+            const pct = pick(s, 'percentChange');
+            if (pct !== undefined && pct !== null) return Number(pct) >= 0;
+            const close = pick(s, 'close'); const ltp = pick(s, 'ltp');
+            return (close !== undefined && ltp !== undefined) ? (Number(ltp) - Number(close)) >= 0 : true;
+        }).length;
+        const down = stocks.length - up;
+        const el = document.getElementById('breadthChart');
+        const cfg = {
+            type: 'bar',
+            data: { labels: ['Up', 'Down'], datasets: [{ data: [up, down], backgroundColor: ['#00e676', '#ff5252'] }] },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#cdd3ea' } },
+                    y: { grid: { color: 'rgba(255,255,255,0.08)' }, ticks: { color: '#cdd3ea' }, beginAtZero: true, precision: 0 }
+                }
+            }
+        };
+        if (window._breadthChart) {
+            window._breadthChart.data.datasets[0].data = [up, down];
+            window._breadthChart.update();
+        } else {
+            window._breadthChart = new Chart(el.getContext('2d'), cfg);
+        }
+    }
+
+    // ======= DOM builders =======
+    function ensureCard(stock) {
+        const grid = document.getElementById('stocksGrid');
+        const sid = idSafe(stock.symbol || stock.tradingSymbol || 'SYMBOL');
+        if (document.getElementById(`card_${sid}`)) return;
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.id = `card_${sid}`;
+        card.innerHTML = `
+      <div class="stock-head">
+        <div class="sym">${stock.symbol || stock.tradingSymbol}</div>
+        <div class="ltp" id="ltp_${sid}">${fmtMoney(pick(stock, 'ltp'))}</div>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi">
+          <div class="label">Change %</div>
+          <div class="value" id="chg_${sid}">—</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Volume</div>
+          <div class="value" id="volText_${sid}">—</div>
+        </div>
+        <div class="kpi">
+          <div class="label">52W</div>
+          <div class="value" id="kpi52_${sid}">—</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Circuits</div>
+          <div class="value" id="kpiCir_${sid}">—</div>
+        </div>
+      </div>
+
+      <div class="rows2">
+        <div class="gauge">
+          <div class="section-title">
+            <h2>Buy/Sell Ratio</h2><span class="pill" id="bsr_${sid}">—</span>
+          </div>
+          <canvas id="gauge_${sid}"></canvas>
+        </div>
+
+        <div class="bands">
+          <div>
+            <div class="section-title"><h2>52-Week Band</h2></div>
+            <div class="band" id="band52_${sid}">
+              <div class="fill"></div>
+              <div class="marker"></div>
+              <div class="labels"></div>
+            </div>
+          </div>
+          <div>
+            <div class="section-title"><h2>Circuit Band</h2></div>
+            <div class="band" id="bandC_${sid}">
+              <div class="fill"></div>
+              <div class="marker"></div>
+              <div class="labels"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mini">
+        <div>
+          <div class="section-title"><h2>Price</h2></div>
+          <canvas id="spark_${sid}"></canvas>
+        </div>
+        <div>
+          <div class="section-title"><h2>Volume</h2></div>
+          <canvas id="volc_${sid}"></canvas>
+        </div>
+      </div>
+
+      <div class="depth" style="margin-top:10px">
+        <div class="section-title"><h2>Orderbook Depth (Top 5)</h2></div>
+        <canvas id="depth_${sid}"></canvas>
+      </div>
+    `;
+        grid.appendChild(card);
+    }
+
+    function updateBasics(stock) {
+        const sym = stock.symbol || stock.tradingSymbol;
+        const sid = idSafe(sym);
+
+        const ltpEl = document.getElementById(`ltp_${sid}`);
+        const chgEl = document.getElementById(`chg_${sid}`);
+        const volTextEl = document.getElementById(`volText_${sid}`);
+        const kpi52 = document.getElementById(`kpi52_${sid}`);
+        const kpiCir = document.getElementById(`kpiCir_${sid}`);
+        const bsr = document.getElementById(`bsr_${sid}`);
+
+        const ltp = Number(pick(stock, 'ltp'));
+        const pct = Number(pick(stock, 'percentChange', 'pctChange'));
+        const vol = Number(pick(stock, 'tradeVolume', 'volume'));
+        const wLow = Number(pick(stock, 'weekLow', '52WeekLow'));
+        const wHigh = Number(pick(stock, 'weekHigh', '52WeekHigh'));
+        const cLow = Number(pick(stock, 'lowerCircuit'));
+        const cHigh = Number(pick(stock, 'upperCircuit'));
+        const buyQ = (stock.buyDepth || []).reduce((sum, b) => sum + (b.quantity || 0), 0);
+        const sellQ = (stock.sellDepth || []).reduce((sum, s) => sum + (s.quantity || 0), 0);
+
+        console.log({ buyQ, sellQ, rawBuy: pick(stock, 'totBuyQuan', 'totalBuyQty'), rawSell: pick(stock, 'totSellQuan', 'totalSellQty') });
+
+        if (ltpEl) ltpEl.textContent = fmtMoney(ltp);
+        if (chgEl) {
+            const safePct = isFinite(pct) ? pct : (
+                isFinite(ltp) && isFinite(stock.close) && stock.close != 0
+                    ? ((ltp - Number(stock.close)) * 100 / Number(stock.close))
+                    : 0
+            );
+            chgEl.textContent = safePct.toFixed(2) + '%';
+            chgEl.classList.toggle('pos', safePct >= 0);
+            chgEl.classList.toggle('neg', safePct < 0);
+        }
+        if (volTextEl) volTextEl.textContent = fmtInt(vol);
+        if (kpi52) kpi52.textContent = `${fmtMoney(wLow)}–${fmtMoney(wHigh)}`;
+        if (kpiCir) kpiCir.textContent = `${fmtMoney(cLow)}–${fmtMoney(cHigh)}`;
+
+        // B/S ratio label
+        const total = Math.max(1, buyQ + sellQ);
+        const bp = total ? Math.round((buyQ * 100) / total) : 0;
+        const sp = 100 - bp;
+        if (bsr) bsr.textContent = `${bp}% / ${sp}%`;
+
+    }
+
+    // ======= Fetch loop =======
+    async function tick() {
+        try {
+            const res = await fetch('/live_market/data', { cache: 'no-store' });
+            const payload = await res.json();
+
+            const sessionBox = document.getElementById('sessionBox');
+            const lastUpdated = document.getElementById('lastUpdated');
+
+            // normalize stocks array from multiple possible shapes
+            let stocks = [];
+            if (Array.isArray(payload)) stocks = payload;
+            else if (Array.isArray(payload?.stocks)) stocks = payload.stocks;
+            else if (Array.isArray(payload?.data)) stocks = payload.data;
+            else if (Array.isArray(payload?.symbols)) stocks = payload.symbols;
+
+            if (payload.error) {
+                sessionBox.className = 'closed';
+                sessionBox.textContent = payload.error;
+                return;
+            }
+
+            lastUpdated.textContent = new Date().toLocaleTimeString();
+            sessionBox.className = 'closed';
+            sessionBox.textContent = `Live • ${stocks.length} symbols`;
+
+            // Breadth
+            renderBreadth(stocks);
+
+            // Per-stock updates
+            stocks.forEach(s => {
+                // Map/alias fields from your feed
+                const symbol = s.symbol || s.tradingSymbol;
+                const buyDepth = pick(s, 'buyDepth') || pick(s, 'depth')?.buy || [];
+                const sellDepth = pick(s, 'sellDepth') || pick(s, 'depth')?.sell || [];
+                // compute buy/sell totals from depth arrays (robust fallback)
+                const buyTotal = (buyDepth || []).reduce((sum, b) => sum + (Number(b.quantity || b.qty || 0) || 0), 0);
+                const sellTotal = (sellDepth || []).reduce((sum, x) => sum + (Number(x.quantity || x.qty || 0) || 0), 0);
+
+                ensureCard(s);
+                updateBasics(s);
+                // renderGauge(symbol, pick(s, 'totBuyQuan', 'totalBuyQty'), pick(s, 'totSellQuan', 'totalSellQty'));
+                // pass numeric totals to renderGauge
+                renderGauge(symbol, buyTotal, sellTotal);
+                renderDepth(symbol, buyDepth, sellDepth);
+                renderSpark(symbol, pick(s, 'ltp'));
+                renderVol(symbol, pick(s, 'tradeVolume', 'volume'));
+                renderBands(
+                    symbol,
+                    pick(s, 'ltp'),
+                    pick(s, 'weekLow', '52WeekLow'),
+                    pick(s, 'weekHigh', '52WeekHigh'),
+                    pick(s, 'lowerCircuit'),
+                    pick(s, 'upperCircuit')
+                );
+            });
+
+        } catch (e) {
+            console.error('tick error', e);
+        }
+    }
+
+    // Kick off: every 5s
+    tick();
+    setInterval(tick, 5000);
+</script>
+
+{% endblock %}

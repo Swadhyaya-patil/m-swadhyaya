@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<div class="px-6 py-10 flex justify-center">
+    <div class="w-full max-w-lg bg-white shadow rounded-xl p-8">
+        <h2 class="text-2xl font-bold mb-2">Join Our Program</h2>
+        <p class="text-gray-600 mb-6">
+            Sign up to start your <strong>3-month free trial</strong>.
+            You’ll see our calls in action, with trades executed safely in your Angel One account.
+            <em>Your money stays in your account — we only automate execution.</em>
+        </p>
+        <form method="POST" class="space-y-4">
+            <!-- Username -->
+            <label class="flex flex-col min-w-40 flex-1">
+                <p class="text-[#111a0f] text-base font-medium leading-normal pb-2">Username</p>
+                <input name="username" placeholder="Username" required
+                    class="form-input flex w-full border rounded px-3 py-2" />
+            </label>
+
+            <!-- Password -->
+            <label class="flex flex-col min-w-40 flex-1">
+                <p class="text-[#111a0f] text-base font-medium leading-normal pb-2">Password</p>
+                <input type="password" name="password" placeholder="Password" required
+                    class="form-input flex w-full border rounded px-3 py-2" />
+            </label>
+
+            <!-- PAN -->
+            <label class="flex flex-col min-w-40 flex-1">
+                <p class="text-[#111a0f] text-base font-medium leading-normal pb-2">PAN Number</p>
+                <input name="pan" placeholder="PAN Number" required
+                    class="form-input flex w-full border rounded px-3 py-2" />
+            </label>
+
+            <!-- Mobile -->
+            <label class="flex flex-col min-w-40 flex-1">
+                <p class="text-[#111a0f] text-base font-medium leading-normal pb-2">Mobile</p>
+                <input name="mobile" placeholder="Mobile" required
+                    class="form-input flex w-full border rounded px-3 py-2" />
+            </label>
+
+            <!-- Broker -->
+            <label class="flex flex-col min-w-40 flex-1">
+                <p class="text-[#111a0f] text-base font-medium leading-normal pb-2">Broker</p>
+                <select name="broker" required class="form-select flex w-full border rounded px-3 py-2">
+                    <option value="AngelOne">AngelOne</option>
+                </select>
+            </label>
+
+            <!-- API Key -->
+            <label class="flex flex-col min-w-40 flex-1">
+                <p class="text-[#111a0f] text-base font-medium leading-normal pb-2">API Key</p>
+                <input name="api_key" placeholder="API Key" required
+                    class="form-input flex w-full border rounded px-3 py-2" />
+            </label>
+
+            <!-- Client ID -->
+            <label class="flex flex-col min-w-40 flex-1">
+                <p class="text-[#111a0f] text-base font-medium leading-normal pb-2">Client ID</p>
+                <input name="client_id" placeholder="Client ID" required
+                    class="form-input flex w-full border rounded px-3 py-2" />
+            </label>
+
+            <!-- MPIN -->
+            <label class="flex flex-col min-w-40 flex-1">
+                <p class="text-[#111a0f] text-base font-medium leading-normal pb-2">MPIN</p>
+                <input name="mpin" placeholder="MPIN" required
+                    class="form-input flex w-full border rounded px-3 py-2" />
+            </label>
+
+            <!-- TOTP Token -->
+            <label class="flex flex-col min-w-40 flex-1">
+                <p class="text-[#111a0f] text-base font-medium leading-normal pb-2">TOTP Token</p>
+                <input name="totp_token" placeholder="TOTP Token" required
+                    class="form-input flex w-full border rounded px-3 py-2" />
+            </label>
+
+            <!-- Capital -->
+            <label class="flex flex-col min-w-40 flex-1">
+                <p class="text-[#111a0f] text-base font-medium leading-normal pb-2">Capital</p>
+                <input name="capital" placeholder="Capital" required
+                    class="form-input flex w-full border rounded px-3 py-2" />
+            </label>
+
+            <button type="submit"
+                class="flex justify-center items-center bg-[#629155] text-white rounded-full h-12 px-4 font-bold">
+                Submit Details
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

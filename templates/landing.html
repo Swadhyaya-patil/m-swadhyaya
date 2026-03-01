@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Welcome{% endblock %}
+{% block content %}
+<div class="flex justify-center px-4 py-10">
+    <div class="flex flex-col max-w-[960px] flex-1">
+        <div class="flex flex-col gap-6 bg-cover bg-center bg-no-repeat items-center justify-center min-h-[480px] rounded-xl p-4"
+            style='background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.4)), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDBkwPRpMsxrsXhD0llEEoHwnAYxHAkqgdoWo4op_WmbxYz2OFPuuLVLENKJXvQfx24STmHTgeqNEU-AC6wrQmaiI70ZLF-44yC13UQocoVOfJ8zsfJqsMnBN8Eb8TdjOY0kx4gkZRGo35SLlG_dcuMYR2wOfZg9G5Fz43qQA4prdEn7eQRDj_QiHkgpLUBHp_VttcA6O0w8bPQo3bUcPWE937N6ksPoDMypoxj_QSmpXoRA1WBS4dNWn77eySPuVCCtsv5OhOD3BdT");'>
+            <div class="flex flex-col gap-2 text-center">
+                <h1 class="text-white text-4xl font-black leading-tight">Automated Trading System</h1>
+                <h2 class="text-white text-base">Maximize your investment potential with advanced algorithms & minimal
+                    risk.</h2>
+            </div>
+            <div class="flex gap-3 flex-wrap justify-center">
+                <a href="{{ url_for('register') }}"
+                    class="flex items-center justify-center rounded-full h-10 px-4 bg-[#8cd279] text-sm font-bold text-[#121810]">
+                    Join our program
+                </a>
+                <a href="{{ url_for('login') }}"
+                    class="flex items-center justify-center rounded-full h-10 px-4 bg-[#ebf1ea] text-sm font-bold text-[#121810]">
+                    Login
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

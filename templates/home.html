@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<main class="flex-1">
+
+    <!-- Hero Section -->
+    <section class="bg-[#111a0f] text-white py-20 px-6 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">Smarter Trading, Simplified</h1>
+        <p class="max-w-2xl mx-auto text-lg text-gray-300 mb-8">
+            Most traders struggle with timing, trailing stop losses, and monitoring.
+            We automate all of it — so you can focus on strategy, not execution.
+        </p>
+        <div class="flex justify-center gap-4">
+            <a href="{{ url_for('register') }}"
+                class="bg-[#8cd279] text-[#111a0f] font-bold rounded-full px-6 py-3 hover:bg-[#7ac66a] transition">
+                🚀 Start Free Trial
+            </a>
+            <a href="{{ url_for('login') }}"
+                class="bg-white text-[#111a0f] font-bold rounded-full px-6 py-3 hover:bg-gray-100 transition">
+                Already a Member? Login
+            </a>
+        </div>
+    </section>
+
+    <!-- Why Us -->
+    <section class="py-16 px-6 max-w-5xl mx-auto text-center">
+        <h2 class="text-3xl font-bold mb-8">Why Traders Love Us</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+            <div class="bg-white rounded-2xl shadow p-6">
+                <h3 class="text-xl font-semibold mb-2">⚡ Timely Execution</h3>
+                <p class="text-gray-600">We instantly place trades based on our recommendations — no missed entries.</p>
+            </div>
+            <div class="bg-white rounded-2xl shadow p-6">
+                <h3 class="text-xl font-semibold mb-2">🛡️ Risk Managed</h3>
+                <p class="text-gray-600">Automatic trailing stop losses protect your capital and lock in profits.</p>
+            </div>
+            <div class="bg-white rounded-2xl shadow p-6">
+                <h3 class="text-xl font-semibold mb-2">🤖 Full Automation</h3>
+                <p class="text-gray-600">From entry to exit, we manage the trade lifecycle on your behalf.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="bg-gray-50 py-16 px-6">
+        <div class="max-w-5xl mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-10">How It Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <h3 class="font-semibold mb-2">📢 Recommendation</h3>
+                    <p class="text-gray-600">Admin posts trade signals for users.</p>
+                </div>
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <h3 class="font-semibold mb-2">💹 Auto Execution</h3>
+                    <p class="text-gray-600">Our system executes trades instantly in your Angel One account.</p>
+                </div>
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <h3 class="font-semibold mb-2">📉 TSL Management</h3>
+                    <p class="text-gray-600">Dynamic trailing stop loss is applied to secure profits.</p>
+                </div>
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <h3 class="font-semibold mb-2">📊 Monitoring & Exit</h3>
+                    <p class="text-gray-600">Trades are tracked, analyzed, and exited as per strategy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Free Trial -->
+    <section class="py-16 px-6 max-w-3xl mx-auto text-center">
+        <h2 class="text-3xl font-bold mb-4">3-Month Free Trial</h2>
+        <p class="text-gray-600 mb-6">
+            Join us risk-free. For 3 months, observe our trade calls, automation, and portfolio analysis.
+            Only continue if you find value.
+        </p>
+        <a href="{{ url_for('register') }}"
+            class="bg-[#629155] text-white font-bold rounded-full px-8 py-4 hover:bg-[#547e4a] transition">
+            Start Free Trial Today
+        </a>
+    </section>
+
+    <!-- Features Overview -->
+    <section class="bg-gray-100 py-16 px-6">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-10">Platform Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <h3 class="font-semibold mb-2">📈 Live Market Dashboard</h3>
+                    <p class="text-gray-600">Track real-time stock performance with charts and insights.</p>
+                </div>
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <h3 class="font-semibold mb-2">💼 Portfolio Tracking</h3>
+                    <p class="text-gray-600">View ongoing & exited trades, P&L, and allocations.</p>
+                </div>
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <h3 class="font-semibold mb-2">🤝 Portfolio Analysis</h3>
+                    <p class="text-gray-600">AI-driven insights on diversification, risk, and suggestions.</p>
+                </div>
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <h3 class="font-semibold mb-2">🧩 Risk Profiling</h3>
+                    <p class="text-gray-600">We tailor trade execution based on your investor profile.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="bg-[#111a0f] text-white py-20 px-6 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Trade Smarter?</h2>
+        <p class="max-w-2xl mx-auto text-lg text-gray-300 mb-8">
+            Join now and see the difference automation makes in your trading journey.
+        </p>
+        <a href="{{ url_for('register') }}"
+            class="bg-[#8cd279] text-[#111a0f] font-bold rounded-full px-8 py-4 hover:bg-[#7ac66a] transition">
+            Get Started Free
+        </a>
+    </section>
+
+</main>
+{% endblock %}

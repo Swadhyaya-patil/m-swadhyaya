@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Trading Bot{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-900">
+
+    <!-- Navbar -->
+    <nav class="bg-[#111a0f] text-white px-6 py-4 flex justify-between items-center">
+        <div class="font-bold text-xl">
+            <a href="{{ url_for('home') }}">TradingBot</a>
+        </div>
+        <div class="space-x-6">
+            <a href="{{ url_for('home') }}" class="hover:text-[#8cd279]">Home</a>
+            <a href="{{ url_for('risk_profile') }}" class="hover:text-[#8cd279]">Risk Profile</a>
+            <a href="{{ url_for('portfolio') }}" class="hover:text-[#8cd279]">Portfolio</a>
+            <a href="{{ url_for('dashboard') }}" class="hover:text-[#8cd279]">Live Market</a>
+            <a href="{{ url_for('register') }}" class="hover:text-[#8cd279]">Join</a>
+
+            {% if current_user is defined and current_user.is_authenticated %}
+            <a href="{{ url_for('logout') }}" class="hover:text-red-400">Logout</a>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="hover:text-[#8cd279]">Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="min-h-screen">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#111a0f] text-gray-300 text-center py-6">
+        <p>© {{ current_year if current_year else "2025" }} TradingBot.
+            Automated trade execution & risk management. <br />
+            <span class="text-sm">Powered by Angel One API • Educational purposes only</span>
+        </p>
+    </footer>
+
+</body>
+
+</html>

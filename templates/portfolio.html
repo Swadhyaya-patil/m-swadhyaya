@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% block title %}Portfolio{% endblock %}
+{% block content %}
+<main class="flex-1 max-w-5xl mx-auto p-6 space-y-8">
+    <h1 class="text-3xl font-bold text-[#111a0f] mb-2">My Portfolio</h1>
+    <p class="text-gray-600">Your trades are automatically tracked. Below you’ll find ongoing, exited trades, and AI
+        insights.</p>
+
+    <!-- Ongoing Trades -->
+    <section class="bg-white rounded-2xl shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">Ongoing Trades</h2>
+        {% if ongoing_trades %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm text-left">
+                <thead class="bg-[#f1f5f9]">
+                    <tr>
+                        <th class="px-4 py-2">Trade ID</th>
+                        <th class="px-4 py-2">Purchase Date</th>
+                        <th class="px-4 py-2">Script Name</th>
+                        <th class="px-4 py-2">Qty</th>
+                        <th class="px-4 py-2">TLS</th>
+                        <th class="px-4 py-2">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trade in ongoing_trades %}
+                    <tr class="border-t">
+                        <td class="px-4 py-2">{{ trade.id }}</td>
+                        <td class="px-4 py-2">{{ trade.purchase_dt }}</td>
+                        <td class="px-4 py-2">{{ trade.script_name }}</td>
+                        <td class="px-4 py-2">{{ trade.qty }}</td>
+                        <td class="px-4 py-2">{{ trade.tls }}</td>
+                        <td class="px-4 py-2">{{ trade.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-gray-500">No ongoing trades.</p>
+        {% endif %}
+    </section>
+
+    <!-- Exited Trades -->
+    <section class="bg-white rounded-2xl shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">Exited Trades</h2>
+        {% if exited_trades %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm text-left">
+                <thead class="bg-[#f1f5f9]">
+                    <tr>
+                        <th class="px-4 py-2">Trade ID</th>
+                        <th class="px-4 py-2">Purchase Date</th>
+                        <th class="px-4 py-2">Exit Date</th>
+                        <th class="px-4 py-2">Purchase Price</th>
+                        <th class="px-4 py-2">Exit Price</th>
+                        <th class="px-4 py-2">Qty</th>
+                        <th class="px-4 py-2">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trade in exited_trades %}
+                    <tr class="border-t">
+                        <td class="px-4 py-2">{{ trade.id }}</td>
+                        <td class="px-4 py-2">{{ trade.purchase_dt }}</td>
+                        <td class="px-4 py-2">{{ trade.exit_dt }}</td>
+                        <td class="px-4 py-2">{{ trade.purchase_price }}</td>
+                        <td class="px-4 py-2">{{ trade.exit_price }}</td>
+                        <td class="px-4 py-2">{{ trade.qty }}</td>
+                        <td class="px-4 py-2">{{ trade.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-gray-500">No exited trades.</p>
+        {% endif %}
+    </section>
+
+    <!-- Portfolio Review -->
+    <section class="bg-white rounded-2xl shadow p-6">
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <h2 class="text-xl font-semibold mb-4">Review My Portfolio</h2>
+        <div class="flex flex-wrap gap-4">
+            <!-- Review Portfolio Button -->
+            <form action="{{ url_for('review_portfolio') }}" method="post">
+                <button type="submit" class="bg-[#629155] text-white font-bold rounded-full px-4 py-2">
+                    Review My Portfolio
+                </button>
+            </form>
+
+            <!-- Live Market Button -->
+            <a href="{{ url_for('dashboard') }}"
+                class="bg-blue-600 text-white font-bold rounded-full px-4 py-2 flex items-center justify-center">
+                📈 Go to Live Market
+            </a>
+        </div>
+
+        {% if feedback %}
+
+
+        <!-- Portfolio Summary -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="p-4 bg-white border rounded-lg shadow text-center">
+                <h4 class="text-sm font-semibold text-gray-600">Total Invested</h4>
+                <p class="text-xl font-bold text-[#111a0f]">₹ {{ '%.2f'|format(total_invested) }}</p>
+            </div>
+            <div class="p-4 bg-white border rounded-lg shadow text-center">
+                <h4 class="text-sm font-semibold text-gray-600">Current Value</h4>
+                <p class="text-xl font-bold text-[#111a0f]">₹ {{ '%.2f'|format(total_current) }}</p>
+            </div>
+            <div class="p-4 bg-white border rounded-lg shadow text-center">
+                <h4 class="text-sm font-semibold text-gray-600">Unrealized P&L</h4>
+                <p class="text-xl font-bold {% if total_pnl >= 0 %}text-green-600{% else %}text-red-600{% endif %}">
+                    ₹ {{ '%.2f'|format(total_pnl) }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Visualization Section -->
+        <div class="mt-6">
+            <h3 class="font-semibold mb-2">📊 Portfolio Insights</h3>
+            <div id="allocation_chart" class="mb-6"></div>
+            <div id="pnl_chart" class="mb-6"></div>
+            <div id="winners_losers" class="mb-6"></div>
+            <div id="return_dist" class="mb-6"></div>
+            <div id="treemap"></div>
+        </div>
+
+        <!-- Load Plotly -->
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Render feedback markdown
+                const raw = document.getElementById('feedback-raw').dataset.feedback;
+                document.getElementById('feedback-rendered').innerHTML = marked.parse(raw);
+
+                // Charts data from Flask
+                const symbols = {{ symbols| tojson
+            }};
+            const invested = {{ invested| tojson }};
+            const pnl = {{ pnl| tojson }};
+            const topSymbols = {{ top_symbols| tojson }};
+            const topPnl = {{ top_pnl| tojson }};
+            const bottomSymbols = {{ bottom_symbols| tojson }};
+            const bottomPnl = {{ bottom_pnl| tojson }};
+            const pnlPercentage = {{ pnl_percentage| tojson }};
+
+            // Pie chart (allocation)
+            Plotly.newPlot("allocation_chart", [{
+                type: "pie",
+                labels: symbols,
+                values: invested,
+                textinfo: "label+percent",
+                hole: 0.4
+            }], { title: "Portfolio Allocation" });
+
+            // Bar chart (PnL per stock)
+            Plotly.newPlot("pnl_chart", [{
+                type: "bar",
+                x: symbols,
+                y: pnl,
+                marker: { color: pnl.map(v => v >= 0 ? "green" : "red") }
+            }], {
+                title: "Unrealized P&L per Stock",
+                yaxis: { title: "Profit/Loss (₹)" }
+            });
+
+            // Winners & Losers (Top/Bottom 25%)
+            const winnersTrace = {
+                type: "bar",
+                x: topSymbols,
+                y: topPnl,
+                marker: { color: "green" },
+                name: "Top 25% Winners"
+            };
+            const losersTrace = {
+                type: "bar",
+                x: bottomSymbols,
+                y: bottomPnl,
+                marker: { color: "red" },
+                name: "Bottom 25% Losers"
+            };
+            Plotly.newPlot("winners_losers", [winnersTrace, losersTrace], {
+                title: "Top 25% Winners vs Bottom 25% Losers (by Return %)",
+                yaxis: { title: "Return % (pnlpercentage)" },
+                barmode: "group"
+            });
+
+            // Return Distribution Histogram
+            Plotly.newPlot("return_dist", [{
+                type: "histogram",
+                x: pnlPercentage,
+                nbinsx: 20,
+                marker: { color: "#629155" }
+            }], {
+                title: "Distribution of Stock Returns (%)",
+                xaxis: { title: "Return % (pnlpercentage)" },
+                yaxis: { title: "Number of Stocks" }
+            });
+
+            // Treemap (Allocation + P&L shading)
+            Plotly.newPlot("treemap", [{
+                type: "treemap",
+                labels: symbols,
+                parents: Array(symbols.length).fill("Portfolio"),
+                values: invested,
+                text: pnl.map(v => "PnL: ₹" + v.toFixed(0)),
+                textinfo: "label+value+percent parent+text",
+                marker: {
+                    colors: pnl,
+                    colorscale: "RdYlGn",
+                    colorbar: { title: "Unrealized P&L (₹)" }
+                }
+            }], {
+                title: "Portfolio Treemap (Allocation + P&L Shading)"
+            });
+    });
+        </script>
+
+        <div id="feedback-container" class="mt-4 p-4 bg-white rounded-md border">
+            <h3 class="font-semibold mb-4">Portfolio Feedback</h3>
+            <div id="feedback-rendered" class="prose max-w-none"></div>
+            <div id="feedback-raw" class="hidden" data-feedback="{{ feedback }}"></div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const raw = document.getElementById('feedback-raw').dataset.feedback;
+                const cleaned = raw.replace(/^###\s*/gm, '');  // optional cleaner
+                document.getElementById('feedback-rendered').innerHTML = marked.parse(cleaned);
+            });
+        </script>
+
+        {% endif %}
+
+    </section>
+
+    <!-- Chat with Admin -->
+    <section class="bg-white rounded-2xl shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">Chat with Admin</h2>
+        <div class="chat-box text-gray-500">
+            <p>Coming soon...</p>
+        </div>
+    </section>
+    <p class="text-xs text-gray-500 mt-6">Disclaimer: This platform provides educational insights and automation
+        tools,not financial advice.</p>
+</main>
+{% endblock %}
