@@ -28,9 +28,24 @@ app.secret_key = 'your_secret_key'  # change this to something strong
 
 # Database config
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'  # update with your real DB URI
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:admin@localhost/bot_2025'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:admin@localhost/bot_2025'
+
+
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+import os
+
+db_user = os.getenv("DB_USER")
+db_pass = os.getenv("DB_PASSWORD")
+db_host = os.getenv("DB_HOST")
+db_name = os.getenv("DB_NAME")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    f"mysql+pymysql://{db_user}:{db_pass}@{db_host}/{db_name}"
+)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 db.init_app(app)
 
