@@ -121,26 +121,52 @@ def register():
 
     return render_template('register.html')
 
-def verify_user(api_key,client_ID,mpin,totp ):
-    clientName =""
-    angel_obj = SmartConnect(api_key)
-    # print("self.angel_obj {}".format(angel_obj))
-    data = angel_obj.generateSession(client_ID,mpin,TOTP(totp).now())
-    print("data {}".format(data))
-    holdings=angel_obj.holding()
-    print("+++++++++++++++++++++++++")
-    print(holdings)
-    print("+++++++++++++++++++++++++")
-    # angel_WS_tocken = angel_obj.getfeedToken()
-    # angel_WS_tocken = data["data"]["jwtToken"]
-    # print("angel_WS_tocken {}".format(angel_WS_tocken))
-    # angel_WS_Obj  = SmartWebSocketV2(data["data"]["jwtToken"], api_key, client_ID, angel_WS_tocken)
-    # print("angel_WS_tocken {}".format(angel_WS_tocken))
-    if data.get('status') == True and data.get('message') == 'SUCCESS':
-        clientName = data.get('data', {}).get('name', '')
-        print(f"client Name --> {clientName}")
-        return True,clientName
-    return False,clientName
+# def verify_user(api_key,client_ID,mpin,totp ):
+#     clientName =""
+#     angel_obj = SmartConnect(api_key)
+#     # print("self.angel_obj {}".format(angel_obj))
+#     data = angel_obj.generateSession(client_ID,mpin,TOTP(totp).now())
+#     print("data {}".format(data))
+#     holdings=angel_obj.holding()
+#     print("+++++++++++++++++++++++++")
+#     print(holdings)
+#     print("+++++++++++++++++++++++++")
+#     # angel_WS_tocken = angel_obj.getfeedToken()
+#     # angel_WS_tocken = data["data"]["jwtToken"]
+#     # print("angel_WS_tocken {}".format(angel_WS_tocken))
+#     # angel_WS_Obj  = SmartWebSocketV2(data["data"]["jwtToken"], api_key, client_ID, angel_WS_tocken)
+#     # print("angel_WS_tocken {}".format(angel_WS_tocken))
+#     if data.get('status') == True and data.get('message') == 'SUCCESS':
+#         clientName = data.get('data', {}).get('name', '')
+#         print(f"client Name --> {clientName}")
+#         return True,clientName
+#     return False,clientName
+
+from pyotp import TOTP
+
+def verify_user(api_key, client_ID, mpin, totp):
+    clientName = ""
+
+    try:
+        angel_obj = SmartConnect(api_key)
+
+        data = angel_obj.generateSession(
+            client_ID,
+            mpin,
+            TOTP(totp).now()
+        )
+
+        print("Login response:", data)
+
+        if data.get("status") and data.get("message") == "SUCCESS":
+            clientName = data.get("data", {}).get("name", "")
+            return True, clientName
+
+    except Exception as e:
+        print("Verification error:", e)
+
+    return False, clientName
+
 
 # Login user
 @app.route('/login', methods=['GET', 'POST'])
