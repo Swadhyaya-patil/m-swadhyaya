@@ -1,9 +1,9 @@
 # angleone_integration.py
 import logging
 import pandas as pd
-from smartapi import SmartConnect
+from SmartApi import SmartConnect
 from pyotp import TOTP
-from smartapi.smartWebSocketV2 import SmartWebSocketV2
+from SmartApi.smartWebSocketV2 import SmartWebSocketV2
 
 logger = logging.getLogger(__name__)
 

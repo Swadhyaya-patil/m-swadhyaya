@@ -5,114 +5,227 @@
 <main class="flex-1">
 
     <!-- Hero Section -->
-    <section class="bg-[#111a0f] text-white py-20 px-6 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-6">Smarter Trading, Simplified</h1>
-        <p class="max-w-2xl mx-auto text-lg text-gray-300 mb-8">
-            Most traders struggle with timing, trailing stop losses, and monitoring.
-            We automate all of it — so you can focus on strategy, not execution.
+    <section class="bg-[#111a0f] text-white py-24 px-6 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+            m-Swadhyaya — Where Your Money Learns to Grow
+        </h1>
+
+        <p class="max-w-3xl mx-auto text-lg text-gray-300 mb-6">
+            <strong>Swadhyaya</strong> means self-learning.
+            <br>
+            <strong>m-Swadhyaya</strong> means your money learns, adapts, and improves — powered by AI.
         </p>
-        <div class="flex justify-center gap-4">
+
+        <p class="max-w-2xl mx-auto text-md text-gray-400 mb-10">
+            We combine artificial intelligence, automation, and disciplined trading strategies
+            to help you participate in markets with confidence — without emotional decisions.
+        </p>
+
+        <div class="flex justify-center gap-4 flex-wrap">
             <a href="{{ url_for('register') }}"
-                class="bg-[#8cd279] text-[#111a0f] font-bold rounded-full px-6 py-3 hover:bg-[#7ac66a] transition">
+                class="bg-[#8cd279] text-[#111a0f] font-bold rounded-full px-8 py-4 hover:bg-[#7ac66a] transition">
                 🚀 Start Free Trial
             </a>
+
             <a href="{{ url_for('login') }}"
-                class="bg-white text-[#111a0f] font-bold rounded-full px-6 py-3 hover:bg-gray-100 transition">
-                Already a Member? Login
+                class="bg-white text-[#111a0f] font-bold rounded-full px-8 py-4 hover:bg-gray-100 transition">
+                Login
             </a>
         </div>
     </section>
 
-    <!-- Why Us -->
+
+    <!-- Brand Story -->
     <section class="py-16 px-6 max-w-5xl mx-auto text-center">
-        <h2 class="text-3xl font-bold mb-8">Why Traders Love Us</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-            <div class="bg-white rounded-2xl shadow p-6">
-                <h3 class="text-xl font-semibold mb-2">⚡ Timely Execution</h3>
-                <p class="text-gray-600">We instantly place trades based on our recommendations — no missed entries.</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow p-6">
-                <h3 class="text-xl font-semibold mb-2">🛡️ Risk Managed</h3>
-                <p class="text-gray-600">Automatic trailing stop losses protect your capital and lock in profits.</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow p-6">
-                <h3 class="text-xl font-semibold mb-2">🤖 Full Automation</h3>
-                <p class="text-gray-600">From entry to exit, we manage the trade lifecycle on your behalf.</p>
+        <h2 class="text-3xl font-bold mb-6">The Philosophy Behind m-Swadhyaya</h2>
+
+        <p class="text-gray-700 max-w-3xl mx-auto text-lg leading-relaxed">
+            Traditional trading depends on emotions, guesswork, and manual monitoring.
+            m-Swadhyaya was built to change that.
+            <br><br>
+            Our platform learns from market behavior, adapts to volatility,
+            and executes trades with discipline — so your capital follows logic, not fear.
+        </p>
+    </section>
+
+
+    <!-- Why Us -->
+    <section class="bg-gray-50 py-16 px-6">
+        <div class="max-w-6xl mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-10">Why Traders Choose m-Swadhyaya</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <h3 class="text-xl font-semibold mb-3">⚡ AI-Driven Execution</h3>
+                    <p class="text-gray-600">
+                        Our system reacts instantly to trade signals and market changes — eliminating delays and missed opportunities.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <h3 class="text-xl font-semibold mb-3">🛡️ Intelligent Risk Control</h3>
+                    <p class="text-gray-600">
+                        Automated trailing stop losses and capital management help protect downside and preserve profits.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <h3 class="text-xl font-semibold mb-3">🤖 Emotion-Free Trading</h3>
+                    <p class="text-gray-600">
+                        No panic buying. No impulsive selling. Decisions are driven by data, patterns, and rules.
+                    </p>
+                </div>
+
             </div>
         </div>
     </section>
 
+
     <!-- How It Works -->
-    <section class="bg-gray-50 py-16 px-6">
-        <div class="max-w-5xl mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-10">How It Works</h2>
+    <section class="py-16 px-6">
+        <div class="max-w-6xl mx-auto text-center">
+
+            <h2 class="text-3xl font-bold mb-12">How m-Swadhyaya Works</h2>
+
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+
                 <div class="bg-white rounded-2xl shadow p-6">
-                    <h3 class="font-semibold mb-2">📢 Recommendation</h3>
-                    <p class="text-gray-600">Admin posts trade signals for users.</p>
+                    <h3 class="font-semibold mb-3">📡 AI Analysis</h3>
+                    <p class="text-gray-600">
+                        Our models analyze price action, volume, trends, and volatility.
+                    </p>
                 </div>
+
                 <div class="bg-white rounded-2xl shadow p-6">
-                    <h3 class="font-semibold mb-2">💹 Auto Execution</h3>
-                    <p class="text-gray-600">Our system executes trades instantly in your Angel One account.</p>
+                    <h3 class="font-semibold mb-3">📢 Trade Signals</h3>
+                    <p class="text-gray-600">
+                        High-probability trade setups are generated and validated.
+                    </p>
                 </div>
+
                 <div class="bg-white rounded-2xl shadow p-6">
-                    <h3 class="font-semibold mb-2">📉 TSL Management</h3>
-                    <p class="text-gray-600">Dynamic trailing stop loss is applied to secure profits.</p>
+                    <h3 class="font-semibold mb-3">💹 Auto Execution</h3>
+                    <p class="text-gray-600">
+                        Trades are placed automatically in your Angel One account.
+                    </p>
                 </div>
+
                 <div class="bg-white rounded-2xl shadow p-6">
-                    <h3 class="font-semibold mb-2">📊 Monitoring & Exit</h3>
-                    <p class="text-gray-600">Trades are tracked, analyzed, and exited as per strategy.</p>
+                    <h3 class="font-semibold mb-3">📊 Smart Management</h3>
+                    <p class="text-gray-600">
+                        Positions are monitored, optimized, and exited based on strategy.
+                    </p>
                 </div>
+
             </div>
         </div>
     </section>
+
+
+    <!-- AI Advantage -->
+    <section class="bg-gray-100 py-16 px-6">
+        <div class="max-w-5xl mx-auto text-center">
+
+            <h2 class="text-3xl font-bold mb-8">Our AI Advantage</h2>
+
+            <p class="text-gray-700 max-w-3xl mx-auto text-lg leading-relaxed mb-10">
+                Unlike rule-based bots, m-Swadhyaya continuously learns from market patterns,
+                past trades, and performance metrics to improve decision quality over time.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <h3 class="font-semibold mb-2">🧠 Adaptive Learning</h3>
+                    <p class="text-gray-600">
+                        Models evolve with changing market conditions.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <h3 class="font-semibold mb-2">📈 Performance Feedback</h3>
+                    <p class="text-gray-600">
+                        Every trade contributes to system improvement.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
 
     <!-- Free Trial -->
     <section class="py-16 px-6 max-w-3xl mx-auto text-center">
         <h2 class="text-3xl font-bold mb-4">3-Month Free Trial</h2>
-        <p class="text-gray-600 mb-6">
-            Join us risk-free. For 3 months, observe our trade calls, automation, and portfolio analysis.
-            Only continue if you find value.
+
+        <p class="text-gray-600 mb-8 leading-relaxed">
+            Experience AI-powered trading without risk.
+            Track real performance, understand the system,
+            and decide only when you are confident.
         </p>
+
         <a href="{{ url_for('register') }}"
             class="bg-[#629155] text-white font-bold rounded-full px-8 py-4 hover:bg-[#547e4a] transition">
-            Start Free Trial Today
+            Start Free Trial
         </a>
     </section>
 
-    <!-- Features Overview -->
-    <section class="bg-gray-100 py-16 px-6">
-        <div class="max-w-5xl mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-10">Platform Features</h2>
+
+    <!-- Platform Features -->
+    <section class="bg-gray-50 py-16 px-6">
+        <div class="max-w-6xl mx-auto">
+
+            <h2 class="text-3xl font-bold text-center mb-12">Platform Features</h2>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
                 <div class="bg-white rounded-2xl shadow p-6">
-                    <h3 class="font-semibold mb-2">📈 Live Market Dashboard</h3>
-                    <p class="text-gray-600">Track real-time stock performance with charts and insights.</p>
+                    <h3 class="font-semibold mb-2">📊 Live Market Dashboard</h3>
+                    <p class="text-gray-600">
+                        Real-time charts, indicators, and market insights.
+                    </p>
                 </div>
+
                 <div class="bg-white rounded-2xl shadow p-6">
-                    <h3 class="font-semibold mb-2">💼 Portfolio Tracking</h3>
-                    <p class="text-gray-600">View ongoing & exited trades, P&L, and allocations.</p>
+                    <h3 class="font-semibold mb-2">💼 Portfolio Management</h3>
+                    <p class="text-gray-600">
+                        Track P&L, exposure, and capital allocation.
+                    </p>
                 </div>
+
                 <div class="bg-white rounded-2xl shadow p-6">
-                    <h3 class="font-semibold mb-2">🤝 Portfolio Analysis</h3>
-                    <p class="text-gray-600">AI-driven insights on diversification, risk, and suggestions.</p>
+                    <h3 class="font-semibold mb-2">📉 Risk Analytics</h3>
+                    <p class="text-gray-600">
+                        Understand drawdowns, volatility, and risk levels.
+                    </p>
                 </div>
+
                 <div class="bg-white rounded-2xl shadow p-6">
-                    <h3 class="font-semibold mb-2">🧩 Risk Profiling</h3>
-                    <p class="text-gray-600">We tailor trade execution based on your investor profile.</p>
+                    <h3 class="font-semibold mb-2">🔐 Secure Integration</h3>
+                    <p class="text-gray-600">
+                        Encrypted API connections with your broker.
+                    </p>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <!-- Call to Action -->
-    <section class="bg-[#111a0f] text-white py-20 px-6 text-center">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Trade Smarter?</h2>
-        <p class="max-w-2xl mx-auto text-lg text-gray-300 mb-8">
-            Join now and see the difference automation makes in your trading journey.
+
+    <!-- Final CTA -->
+    <section class="bg-[#111a0f] text-white py-24 px-6 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">
+            Let Your Money Learn. Let AI Work.
+        </h2>
+
+        <p class="max-w-2xl mx-auto text-lg text-gray-300 mb-10">
+            Join m-Swadhyaya and experience disciplined, intelligent,
+            and transparent trading automation.
         </p>
+
         <a href="{{ url_for('register') }}"
-            class="bg-[#8cd279] text-[#111a0f] font-bold rounded-full px-8 py-4 hover:bg-[#7ac66a] transition">
+            class="bg-[#8cd279] text-[#111a0f] font-bold rounded-full px-10 py-4 hover:bg-[#7ac66a] transition">
             Get Started Free
         </a>
     </section>

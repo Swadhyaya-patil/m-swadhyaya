@@ -8,8 +8,8 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Trade, TradeRecommendation
-from smartapi import SmartConnect
-from smartapi.smartWebSocketV2 import SmartWebSocketV2
+from SmartApi import SmartConnect
+from SmartApi.smartWebSocketV2 import SmartWebSocketV2
 from pyotp import TOTP
 from services import execute_trades_for_recommendations,set_tsl_for_clients
 import math
@@ -35,16 +35,14 @@ app.secret_key = 'your_secret_key'  # change this to something strong
 
 import os
 
-db_user = os.getenv("DB_USER")
-db_pass = os.getenv("DB_PASSWORD")
-db_host = os.getenv("DB_HOST")
-db_name = os.getenv("DB_NAME")
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "admin")
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_NAME = os.getenv("DB_NAME", "swadhyaya_db")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    f"mysql+pymysql://{db_user}:{db_pass}@{db_host}/{db_name}"
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 )
-
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 db.init_app(app)
@@ -70,7 +68,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        name = request.form['name']
+        # name = request.form['name']
         pan = request.form['pan']
         mobile = request.form['mobile']
         broker = request.form['broker']
