@@ -66,17 +66,29 @@ def home():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        # username = request.form['username']
+        # password = request.form['password']
+        # name = None
+        # pan = request.form['pan']
+        # mobile = request.form['mobile']
+        # broker = request.form['broker']
+        # api_key = request.form['api_key']
+        # client_id = request.form['client_id']
+        # mpin = request.form['mpin']
+        # totp_token = request.form['totp_token']
+        # capital = request.form['capital']
+
+        username = request.form.get('username')
+        password = request.form.get('password')
+        pan = request.form.get('pan')
         name = None
-        pan = request.form['pan']
-        mobile = request.form['mobile']
-        broker = request.form['broker']
-        api_key = request.form['api_key']
-        client_id = request.form['client_id']
-        mpin = request.form['mpin']
-        totp_token = request.form['totp_token']
-        capital = request.form['capital']
+        mobile = request.form.get('mobile')
+        broker = request.form.get('broker')
+        api_key = request.form.get('api_key')
+        client_id = request.form.get('client_id')
+        mpin = request.form.get('mpin')
+        totp_token = request.form.get('totp_token')
+        capital = request.form.get('capital')
 
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
