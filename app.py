@@ -68,7 +68,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        # name = request.form['name']
+        name = None
         pan = request.form['pan']
         mobile = request.form['mobile']
         broker = request.form['broker']
