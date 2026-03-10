@@ -48,8 +48,23 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 db.init_app(app)
 
 # Create tables if they don't exist
+# with app.app_context():
+#     db.create_all()
+
+import time
+
+def init_db():
+    for i in range(10):
+        try:
+            db.create_all()
+            print("Database connected")
+            return
+        except Exception as e:
+            print("Waiting for DB...", e)
+            time.sleep(5)
+
 with app.app_context():
-    db.create_all()
+    init_db()
 
 # ----------------- Routes -----------------
 
